@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Услуги и категории</title>
+</head>
+<body>
+    <h1>Услуги автосервиса</h1>
+    <form method="get">
+        <label>Категория:
+            <select name="category">
+                <option value="">Все</option>
+                {% for cat in categories %}
+                    <option value="{{ cat.id }}" {% if selected_category == cat.id|stringformat:'s' %}selected{% endif %}>{{ cat.name }}</option>
+                {% endfor %}
+            </select>
+        </label>
+        <label>Цена от: <input type="number" name="min_price" value="{{ min_price|default:'' }}" step="0.01"></label>
+        <label>до: <input type="number" name="max_price" value="{{ max_price|default:'' }}" step="0.01"></label>
+        <button type="submit">Фильтровать</button>
+    </form>
+    <hr>
+    {% for cat in categories %}
+        <h2 id="cat{{ cat.id }}">{{ cat.name }}</h2>
+        <ul>
+        {% for service in services %}
+            {% if service.category_id == cat.id %}
+                <li>
+                    <b>{{ service.name }}</b> — {{ service.price }} BYN<br>
+                    <small>{{ service.description }}</small>
+                </li>
+            {% endif %}
+        {% empty %}
+            <li>Нет услуг.</li>
+        {% endfor %}
+        </ul>
+    {% endfor %}
+    {% if user.is_authenticated and user.role == 'client' %}
+        <a href="{% url 'appointment_create' %}">Записаться на услуги</a>
+    {% endif %}
+    <a href="/">На главную</a>
+</body>
+</html> 

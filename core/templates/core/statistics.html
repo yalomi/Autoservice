@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Статистика</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <h1>Статистика сайта</h1>
+    <h2>Список клиентов и сумма купленных услуг</h2>
+    <table border="1">
+        <tr><th>Имя</th><th>Email</th><th>Сумма купленных услуг (BYN)</th></tr>
+        {% for c in clients %}
+            <tr><td>{{ c.name }}</td><td>{{ c.email }}</td><td>{{ c.total }}</td></tr>
+        {% endfor %}
+    </table>
+    <h2>Статистика по сумме купленных услуг</h2>
+    <ul>
+        <li>Среднее: {{ sum_stats.mean }}</li>
+        <li>Медиана: {{ sum_stats.median }}</li>
+        <li>Мода: {{ sum_stats.mode }}</li>
+    </ul>
+    <h2>Статистика по возрасту клиентов</h2>
+    <ul>
+        <li>Средний возраст: {{ age_stats.mean }}</li>
+        <li>Медиана возраста: {{ age_stats.median }}</li>
+    </ul>
+    <h2>График: Сумма купленных услуг по датам</h2>
+    <canvas id="servicesChart" width="600" height="300"></canvas>
+    <script>
+        const chartLabels = {{ chart_labels|safe }};
+        const chartData = {{ chart_data|safe }};
+        new Chart(document.getElementById('servicesChart'), {
+            type: 'line',
+            data: {
+                labels: chartLabels,
+                datasets: [{
+                    label: 'Сумма купленных услуг',
+                    data: chartData,
+                    borderColor: 'blue',
+                    fill: false
+                }]
+            },
+            options: {
+                scales: {
+                    x: { title: { display: true, text: 'Дата' } },
+                    y: { title: { display: true, text: 'Сумма (BYN)' } }
+                }
+            }
+        });
+    </script>
+    <a href="/">На главную</a>
+</body>
+</html> 

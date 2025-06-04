@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Моё расписание</title>
+</head>
+<body>
+    <h1>Моё расписание</h1>
+    <ul>
+        {% for app in appointments %}
+            <li>
+                <b>Клиент:</b> {{ app.client.user.get_full_name }} ({{ app.client.user.email }}, {{ app.client.user.phone }})<br>
+                <b>Дата:</b> {{ app.date }} {{ app.time }}<br>
+                <b>Услуги:</b>
+                <ul>
+                    {% for s in app.services.all %}
+                        <li>{{ s.name }} ({{ s.price }} BYN)</li>
+                    {% endfor %}
+                </ul>
+                <b>Итого:</b> {{ app.total_price }} BYN<br>
+                <b>Статус:</b> {{ app.get_status_display }}
+                {% if app.status == 'pending' %}
+                    <a href="{% url 'appointment_confirm' app.pk %}">Подтвердить</a> |
+                    <a href="{% url 'appointment_reject' app.pk %}">Отклонить</a>
+                {% elif app.status == 'confirmed' %}
+                    <a href="{% url 'appointment_complete' app.pk %}">Выполнить</a>
+                {% endif %}
+            </li>
+        {% empty %}
+            <li>У вас пока нет записей.</li>
+        {% endfor %}
+    </ul>
+    <a href="/">На главную</a>
+</body>
+</html> 

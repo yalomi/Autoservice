@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Погода и курсы валют</title>
+    <style>
+        .weather-card {
+            border: 1px solid #ddd;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+            background-color: #f9f9f9;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .weather-icon {
+            vertical-align: middle;
+            margin-right: 10px;
+            width: 64px;
+            height: 64px;
+        }
+        .weather-details {
+            margin-top: 10px;
+            color: #666;
+            font-size: 16px;
+        }
+        .weather-temp {
+            font-size: 32px;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+        .weather-desc {
+            font-size: 20px;
+            color: #333;
+            margin: 5px 0;
+        }
+        .error-message {
+            color: #d32f2f;
+            padding: 10px;
+            background-color: #ffebee;
+            border-radius: 4px;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>Панель пользователя</h1>
+    <div class="weather-card">
+        <h2>Погода в {{ city }}</h2>
+        {% if weather.error %}
+            <div class="error-message">Ошибка: {{ weather.error }}</div>
+        {% else %}
+            <div>
+                <img src="https://cdn.weatherapi.com/weather/64x64/day/{{ weather.icon }}.png" alt="weather icon" class="weather-icon">
+                <div class="weather-temp">{{ weather.temp }}°C</div>
+                <div class="weather-desc">{{ weather.desc|title }}</div>
+                <div class="weather-details">
+                    <p>Влажность: {{ weather.humidity }}%</p>
+                    <p>Скорость ветра: {{ weather.wind_speed }} км/ч</p>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+
+    <h2>Курсы валют (BYN)</h2>
+    {% if rates.error %}
+        <div class="error-message">Ошибка: {{ rates.error }}</div>
+    {% else %}
+        <ul>
+            {% for k, v in rates.items %}
+                <li>1 BYN = {{ v }} {{ k }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+    <h2>Конвертер валют</h2>
+    <form method="get">
+        {{ form.as_p }}
+        <button type="submit">Конвертировать</button>
+    </form>
+    {% if convert_result %}
+        <p><b>Результат:</b> {{ convert_result }}</p>
+    {% endif %}
+    
+    <p><a href="/">На главную</a></p>
+</body>
+</html> 

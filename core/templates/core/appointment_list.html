@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Мои записи</title>
+</head>
+<body>
+    <h1>Мои записи</h1>
+    <ul>
+        {% for app in appointments %}
+            <li>
+                <b>Мастер:</b> {{ app.master.user.get_full_name }}<br>
+                <b>Дата:</b> {{ app.date }} {{ app.time }}<br>
+                <b>Услуги:</b>
+                <ul>
+                    {% for s in app.services.all %}
+                        <li>{{ s.name }} ({{ s.price }} BYN)</li>
+                    {% endfor %}
+                </ul>
+                <b>Итого:</b> {{ app.total_price }} BYN<br>
+                <b>Статус:</b> {{ app.get_status_display }}
+                {% if app.status != 'completed' and app.status != 'cancelled' %}
+                    <form method="post" action="{% url 'appointment_delete' app.pk %}" style="display:inline;">
+                        {% csrf_token %}
+                        <button type="submit" onclick="return confirm('Удалить запись?');">Удалить</button>
+                    </form>
+                {% endif %}
+            </li>
+        {% empty %}
+            <li>У вас пока нет записей.</li>
+        {% endfor %}
+    </ul>
+    <a href="/">На главную</a>
+</body>
+</html> 

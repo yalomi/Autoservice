@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Словарь терминов и понятий</title>
+</head>
+<body>
+    <h1>Словарь терминов и понятий</h1>
+    <ul>
+        {% for faq in faqs %}
+            <li><b>{{ faq.question }}</b><br>{{ faq.answer }}<br><small>Добавлено: {{ faq.added_at|date:'d.m.Y' }}</small></li>
+        {% empty %}
+            <li>Пока нет терминов.</li>
+        {% endfor %}
+    </ul>
+    {% if user.is_authenticated %}
+        <a href="/accounts/profile/">Личный кабинет</a> | <a href="/accounts/logout/">Выйти</a>
+    {% else %}
+        <a href="/accounts/login/">Войти</a> | <a href="/accounts/register/">Регистрация</a>
+    {% endif %}
+    <a href="/">На главную</a>
+</body>
+</html> 

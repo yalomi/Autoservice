@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Новости</title>
+</head>
+<body>
+    <h1>Новости</h1>
+    {% for article in articles %}
+        <div style="border:1px solid #ccc; margin:10px; padding:10px;">
+            <h2>{{ article.title }}</h2>
+            <p>{{ article.summary }}</p>
+            {% if article.image %}
+                <img src="{{ article.image.url }}" alt="{{ article.title }}" width="200">
+            {% endif %}
+            <small>Опубликовано: {{ article.published_at|date:'d.m.Y H:i' }}</small>
+        </div>
+    {% empty %}
+        <p>Пока нет новостей.</p>
+    {% endfor %}
+    <a href="/">На главную</a>
+</body>
+</html> 
